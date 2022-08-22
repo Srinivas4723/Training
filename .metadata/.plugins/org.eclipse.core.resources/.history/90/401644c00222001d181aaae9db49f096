@@ -1,0 +1,9 @@
+package com.example.Demo2;
+
+@RestController
+public class UserController {
+	@GetMapping
+	public void getUser() {
+		return test;
+	}
+}

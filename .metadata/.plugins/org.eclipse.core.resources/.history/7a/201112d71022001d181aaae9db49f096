@@ -1,0 +1,6 @@
+package com.hnt.entity;
+
+@Entity
+public class User {
+
+}
