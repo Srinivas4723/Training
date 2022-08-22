@@ -1,6 +1,0 @@
-package com.example.Demo2;
-
-@RestController
-public class UserController {
-
-}

@@ -19,6 +19,7 @@ public class UserController {
 	
 	@GetMapping
 	String getUser() {
+		System.out.println("test");
 		return "test";
 	}
 	
