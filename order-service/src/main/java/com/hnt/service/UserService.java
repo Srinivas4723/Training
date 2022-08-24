@@ -1,4 +1,5 @@
 package com.hnt.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,9 @@ public class UserService {
 	UserRepository repository;
 	public void save(User user) {
 		repository.save(user);
+	}
+	public Iterable<User> getUser() {
+		return repository.findAll();
 	}
 
 }
