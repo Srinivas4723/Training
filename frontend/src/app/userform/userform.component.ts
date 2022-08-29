@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { UserService } from '../user.service';
 
 @Component({
@@ -15,8 +16,13 @@ export class UserformComponent implements OnInit {
 
   saveUser(){
     console.log('clicked');
-    const promise = this.userService.save(this.user);
-    promise.subscribe();
+    const promise  = this.userService.save(this.user);
+    promise.subscribe((response:any)=>{
+      console.log("response"+response);
+    },
+    (error:any)=>{
+      console.log("response error"+error)
+    });
   }
   ngOnInit(): void {
   }
