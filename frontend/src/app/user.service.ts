@@ -7,7 +7,7 @@ const URL ="http://localhost:8082/user"
 })
 export class UserService {
   save(user: any) {
-    return this.http.post(URL,user);
+    return this.http.post(URL+"/age/34/height/160",user);
   }
 
   constructor(public http:HttpClient) { }

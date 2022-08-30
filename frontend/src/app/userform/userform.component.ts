@@ -12,13 +12,16 @@ export class UserformComponent implements OnInit {
     name: 'Srinivas',
     age: 10
   }
-  constructor(public userService: UserService) { }
+  users:any[]=[];
+    constructor(public userService: UserService) { }
 
   saveUser(){
     console.log('clicked');
     const promise  = this.userService.save(this.user);
-    promise.subscribe((response:any)=>{
-      console.log("response"+response);
+    promise.subscribe((responseBody:any)=>{
+      console.log("response"+responseBody.id);
+      this.users.push(responseBody);
+      
     },
     (error:any)=>{
       console.log("response error"+error)

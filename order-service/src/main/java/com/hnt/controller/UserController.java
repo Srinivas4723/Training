@@ -43,7 +43,7 @@ public class UserController extends BaseController {// accept requests
 		
 		MultiValueMap headers = new LinkedMultiValueMap<String, String>();
 		headers.add("headerfromserver", "success");
-		ResponseEntity responseEntity = new ResponseEntity(headers , HttpStatus.CREATED);
+		ResponseEntity responseEntity = new ResponseEntity(user,headers , HttpStatus.CREATED);
 		
 		return responseEntity;
 	}
