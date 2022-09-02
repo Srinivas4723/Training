@@ -1,5 +1,7 @@
 package com.hnt.service;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,10 @@ public class UserService {
 	}
 	public Iterable<User> getUser() {
 		return repository.findAll();
+	}
+	public void delete( Integer id) {
+		repository.deleteById(id);
+		
 	}
 
 }

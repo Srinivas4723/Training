@@ -1,12 +1,22 @@
-<div>
+<body >
+    <p>Userform</p>
+    
+
+
+<div id="signuppage">
     FristName:  <input [(ngModel)]='user.name'>{{user.name}}<br/>
     Age:  <input [(ngModel)]='user.age'><br>
+    Password : <input type="date" [(ngModel)]='user.dob'><br>
+    <p >{{signUpResponse}}</p>
 <button (click)='saveUser()'>Save</button>
 <ol >
     <li *ngFor="let user of users">
 
         {{user.name}}
+        {{user.dob | date}} <button (click)="deleteUser(user.id)">delete</button>
     </li>
 </ol>
 <userlist></userlist>
 </div>
+
+</body>

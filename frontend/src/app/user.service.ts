@@ -6,10 +6,15 @@ const URL ="http://localhost:8082/user"
   providedIn: 'root'
 })
 export class UserService {
+    delete(id: any){
+        return this.http.delete(URL+"/delete/"+id)
+    }
   save(user: any) {
-    return this.http.post(URL+"/age/34/height/160",user);
+    return this.http.post(URL,user);
   }
-
+  getUsers(){
+      return this.http.get(URL);
+  }
   constructor(public http:HttpClient) { }
 
 }

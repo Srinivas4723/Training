@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hnt.UserRepository;
 import com.hnt.entity.User;
 import com.hnt.service.UserService;
 
@@ -28,12 +30,14 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController extends BaseController {// accept requests
 	@Autowired // DI
 	UserService userService; // dependency
-
+	@Autowired // DI
+	UserRepository repository; // dependency
+	
 	@GetMapping
 	Iterable<User> getUser() {
 		return userService.getUser();
 	}
-
+	
 	@PostMapping("/age/{age}/height/{height}") // base path
 	@ResponseStatus(code = HttpStatus.CREATED)
 	ResponseEntity saveUser(@Valid @RequestBody User user, @PathVariable("age") int age, @PathVariable("height") float height) {
@@ -51,7 +55,15 @@ public class UserController extends BaseController {// accept requests
 	@PostMapping
 	Integer saveUser1(@Valid @RequestBody User user) {
 		userService.save(user);//mock
-		System.out.println("second");
+		
 		return user.getId();
+	}
+	
+	@DeleteMapping("/delete/{userid}")
+	ResponseEntity<?> deleteUser(@PathVariable("userid") Integer id) {
+		userService.delete(id);//mock
+		System.out.println("second");
+		Iterable<User> users=repository.findAll();
+		return new ResponseEntity(users,HttpStatus.CREATED);
 	}
 }

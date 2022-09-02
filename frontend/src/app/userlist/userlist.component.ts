@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { UserService } from '../user.service';
 @Component({
   selector: 'userlist',
   templateUrl: './userlist.component.html',
@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserlistComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(public userService:UserService) { }
+  users:any[]=[];
   ngOnInit(): void {
+    const observable= this.userService.getUsers();
+    observable.subscribe((usersfromServer:any)=>{
+      this.users=usersfromServer;
+    });
   }
 
 }

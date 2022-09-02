@@ -1,5 +1,7 @@
 package com.hnt.entity;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,7 +9,10 @@ import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
+import lombok.Data;
+
 @Entity
+@Data
 public class User {//not a spring bean
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,22 +21,30 @@ public class User {//not a spring bean
 	private String name;
 	@Min(value = 1, message = "age cannot be less than 1")
 	private int age;
+	
+	private Date dob;
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
-	} 
+	}
 	public int getAge() {
 		return age;
 	}
 	public void setAge(int age) {
 		this.age = age;
 	}
-	public Integer getId() {
-		return id;
+	public Date getDob() {
+		return dob;
 	}
-	public void setId(Integer id) {
-		this.id = id;
+	public void setDob(Date dob) {
+		this.dob = dob;
 	}
 }
