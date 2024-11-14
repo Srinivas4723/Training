@@ -1,0 +1,45 @@
+packUpdateMethod(fetchAllMoveResponse: any) {
+        if (fetchAllMoveResponse != null) {
+            console.log("Before Update Fetchallmoves Response:", fetchAllMoveResponse);
+            for (var fetchObj of fetchAllMoveResponse) {
+                const inventoryMove = fetchObj.InventoryMove;
+                const taskDetailEaches = inventoryMove.TaskDetailEaches;
+                const taskDetailId = inventoryMove.TaskDetailIds;
+                if (taskDetailEaches.some(Obj => Obj.TaskDetailId === taskDetailId[0])) {
+        
+                    const pid = inventoryMove.ItemId;
+                    console.log("inside if of taskdetails", pid);
+                    const pkdqty = this.ItemPickedQtyMap[pid].PickedQty;
+                    if (inventoryMove.CompletedQuantity != pkdqty) {
+                        inventoryMove.CompletedQuantity = pkdqty - inventoryMove.CompletedQuantity;
+                        console.log("inside if of taskdetails pickedqty", pkdqty);
+                        let inventoryAttributesMap = {
+                        "AttributeNameId": "SERIAL_NUMBER",
+                        "AttributeValue": this.ItemPickedQtyMap[pid].SerialNumber,
+                        "Uom": "UNIT",
+                        "AttributeActionType": "ADD",
+                        "UnitAttributeId": taskDetailId[0]
+                    };
+                    inventoryMove.InventoryAttributes.push(inventoryAttributesMap);
+                    console.log("After adding invattrmap:", inventoryAttributesMap);
+                    console.log("After adding invattrmap to fetchAllMoveResponse:", fetchAllMoveResponse);
+                    }
+                }
+        
+                console.log("After Update Fetchallmoves Response:", fetchAllMoveResponse);
+                let url = environment.service.EX61PackUpdate;
+                    console.log("Implemented Forloop for fetchAllMoveResponse:", fetchObj);
+                        this.postService.postData(url, this.orgId, this.locnId, fetchObj).subscribe(
+                            (packupdateResponse) => {
+                                console.log("Inside Quantity Validation service: ", packupdateResponse);
+                                console.log("Inside Quantity Validation and cjeck ItemPickedQtyMap :", this.ItemPickedQtyMap);
+                            },
+                            (error) => {
+                                console.log("error at pack update api", JSON.stringify(error));
+                                this.showError("Pack update api failed", false);
+                            }
+                    );
+            }
+        }
+
+}
