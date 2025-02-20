@@ -6,7 +6,7 @@
             "InventoryMove": {
                 "BusinessUnitId": null,
                 "TaskId": "PACK0000003263",
-                "SourceContainerType": "OLPN",
+                "SourceContainerType": "OLPN srinivas",
                 "SourceContainerId": "00230877010000004828",
                 "TargetContainerType": null,
                 "TargetContainerId": null,
