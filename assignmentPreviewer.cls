@@ -1,6 +1,58 @@
-public class assignmentPreviewer {
+/**
+ * @description This class is responsible for generating ad hoc data and stage data for learning paths and stages.
+ *              It includes methods for creating assignments, rendering email templates, and managing access.
+ */
+public class AssignmentPreviewer {
     private static Map<String, Included_Item__c> taskItemsById;
-
+	private static Map<String, Map<String, List<String>>> generateAdHocDataAccess = new Map<String, Map<String, List<String>>> {
+        'Learning_Path__c' => new Map<String, List<String>> {
+            'Read' => new List<String> {
+                'Id', 'Name', 'Milestone__c', 'Milestone_Completion_Type__c', 'Milestone_Completion_Ids__c', 'Externally_Available__c'
+            }
+        },
+        'Included_Item__c' => new Map<String, List<String>>{
+            'Read' => new List<String> {
+                'Id', 'Learning_Offering__c','Learning_Path__c', 'Tasks__c', 'Order__c', 'Course_Narrative__c'
+            }
+        },
+        'Learning_Offering__c' => new Map<String, List<String>> {
+            'Read' => new List<String>{
+                'Id', 'Type__c'
+            }
+        }
+    };
+	 private static Map<String, Map<String, List<String>>> generateStageDataAccess = new Map<String, Map<String, List<String>>> {
+        'Learning_Path__c' => new Map<String, List<String>> {
+            'Read' => new List<String> {
+                'Id', 'Name', 'Milestone__c', 'Milestone_Completion_Type__c', 'Milestone_Completion_Ids__c', 'Externally_Available__c'
+            }
+        },
+        'Included_Item__c' => new Map<String, List<String>>{
+            'Read' => new List<String> {
+                'Id', 'Learning_Offering__c', 'Learning_Path__c', 'Tasks__c', 'Order__c', 'Course_Narrative__c'
+            }
+        },
+        'Learning_Offering__c' => new Map<String, List<String>> {
+            'Read' => new List<String>{
+                'Id', 'Type__c'
+            }
+        },
+        'Stage__c' => new Map<String, List<String>> {
+            'Read' => new List<String>{
+                'Id', 'Name', 'Journey__c', 'End_Day__c', 'Start_Day__c'
+            }
+        },
+        'Included_Path__c' => new Map<String, List<String>> {
+            'Read' => new List<String>{
+                'Id', 'Learning_Path__c', 'Order__c', 'Start_Date__c', 'Archive_Date__c'
+            }
+        }
+    };
+	/**
+	 * @description Generates ad hoc data for a given learning path ID.
+	 * @param lpId The ID of the learning path for which to generate ad hoc data.
+	 * @return A JSON string containing the response data.
+	 */
     @AuraEnabled
     public static String generateAdHocData(String lpId) {
         responseData rd = new responseData();
@@ -45,6 +97,11 @@ public class assignmentPreviewer {
         return rd.getJsonString();
     }
 
+	/**
+     * @description Generates stage data for a given stage ID.
+     * @param stageId The ID of the stage for which to generate data.
+     * @return A JSON string containing the response data.
+     */
     @AuraEnabled
     public static String generateStageData(String stageId) {
         responseData rd = new responseData();
@@ -267,52 +324,6 @@ public class assignmentPreviewer {
 
         return renderedTemplates;
     }
-
-    private static Map<String, Map<String, List<String>>> generateAdHocDataAccess = new Map<String, Map<String, List<String>>> {
-        'Learning_Path__c' => new Map<String, List<String>> {
-            'Read' => new List<String> {
-                'Id', 'Name', 'Milestone__c', 'Milestone_Completion_Type__c', 'Milestone_Completion_Ids__c', 'Externally_Available__c'
-            }
-        },
-        'Included_Item__c' => new Map<String, List<String>>{
-            'Read' => new List<String> {
-                'Id', 'Learning_Offering__c','Learning_Path__c', 'Tasks__c', 'Order__c', 'Course_Narrative__c'
-            }
-        },
-        'Learning_Offering__c' => new Map<String, List<String>> {
-            'Read' => new List<String>{
-                'Id', 'Type__c'
-            }
-        }
-    };
-
-    private static Map<String, Map<String, List<String>>> generateStageDataAccess = new Map<String, Map<String, List<String>>> {
-        'Learning_Path__c' => new Map<String, List<String>> {
-            'Read' => new List<String> {
-                'Id', 'Name', 'Milestone__c', 'Milestone_Completion_Type__c', 'Milestone_Completion_Ids__c', 'Externally_Available__c'
-            }
-        },
-        'Included_Item__c' => new Map<String, List<String>>{
-            'Read' => new List<String> {
-                'Id', 'Learning_Offering__c', 'Learning_Path__c', 'Tasks__c', 'Order__c', 'Course_Narrative__c'
-            }
-        },
-        'Learning_Offering__c' => new Map<String, List<String>> {
-            'Read' => new List<String>{
-                'Id', 'Type__c'
-            }
-        },
-        'Stage__c' => new Map<String, List<String>> {
-            'Read' => new List<String>{
-                'Id', 'Name', 'Journey__c', 'End_Day__c', 'Start_Day__c'
-            }
-        },
-        'Included_Path__c' => new Map<String, List<String>> {
-            'Read' => new List<String>{
-                'Id', 'Learning_Path__c', 'Order__c', 'Start_Date__c', 'Archive_Date__c'
-            }
-        }
-    };
 
     private static void checkAccess(Map<String, Map<String, List<String>>> checkMap){
         dmlManager.checkAccess(checkMap);
