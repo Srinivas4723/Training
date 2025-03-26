@@ -1,0 +1,354 @@
+var facilityCodes = [];
+var contextPath;
+var searchResultsTable;
+
+var cancelDialog;
+var requestCreated = false;
+
+$(document).ready(function() {
+	contextPath = $('#context').val();
+
+	$("#createdDate").datepicker({format : "yyyy-mm-dd", autoclose : true});
+
+	// Clear Button click
+	$("#resetId").click(function(){
+		$("#searchFormId").trigger("reset");
+	});
+
+	// Initialize the Search Results Datatable
+	initSearchResultsTable();
+
+	// Search Button click
+	$('#searchId').click(function() {
+		prepareSearchRequest();
+	});
+
+	// Create Button click
+	$('#createId').click(function() {
+		initCreateDialog();
+		
+		$("#cfacilityCode").autocomplete({
+			source: function(request, response) {
+				var results = $.ui.autocomplete.filter(facilityCodes, request.term);
+				response(results.slice(0, 6));
+			}
+		});
+	});
+
+	// Cancel Button click
+	$('#cancelId').click(function() {
+		validateCancel();		
+	});
+
+	// Refresh Button click
+	$('#refreshId').click(function() {
+		$("#searchFormId").trigger("reset");
+		refreshRequests();
+	});
+
+});
+
+function initSearchResultsTable() {
+	searchResultsTable = $("#searchResultsTable").DataTable({
+		data:[],
+		select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+		order: [[ 11, 'desc' ]],
+		columns: [
+			{	"orderable": false,
+				"className": 'select-checkbox',
+				"render": function ( data, type, row, meta ) {
+					return '<td></td>';
+				}
+			},
+			{"data":"requestNumber"},
+			{"data":"partNumber"},
+			{"data":"agreementType"},
+			{"data":"year"},
+			{"data":"facilityCode"},
+			{"data":"engineeringChange"},
+			{"data":"status"},
+			{"data":"resultNumber"},
+			{"data":"uploadType"},
+			{"data":"createdBy"},
+			{"data":"createdDate",
+				"render": function (data) {
+					return formatDate(data);
+				}
+			},
+			{"data":"errorMessage[, ]"}
+			],
+			rowCallback: function (row, data) {},
+			filter: false,
+			info: false,
+			ordering: true,
+			processing: true,
+			retrieve: true,
+			paging: true
+	});
+}
+
+function prepareSearchRequest() {
+	var uploadTypes = [];
+	var agreementTypes = [];
+	var statuses = [];
+
+	$("#uploadType option:selected").each(function () {
+		var $this = $(this);
+		if ($this.length) {
+			uploadTypes.push($this.text());
+		}
+	});
+
+	$("#agreementType option:selected").each(function () {
+		var $this = $(this);
+		if ($this.length) {
+			agreementTypes.push($this.text());
+		}
+	});
+
+	$("#status option:selected").each(function () {
+		var $this = $(this);
+		if ($this.length) {
+			statuses.push($this.text());
+		}
+	});
+	
+	var searchRequestData = {};
+	searchRequestData.requestNumber = $("#requestNumber").val().toUpperCase();
+	searchRequestData.partNumber = $("#partNumber").val().toUpperCase();
+	searchRequestData.engineeringChange = $("#engineeringChange").val().toUpperCase();
+	searchRequestData.resultNumber = $("#resultNumber").val().toUpperCase();
+	searchRequestData.facilityCode = $("#facilityCode").val().toUpperCase();
+	searchRequestData.createdDate = $("#createdDate").datepicker('getDate');
+	searchRequestData.createdBy = $("#createdBy").val().toLowerCase();
+	searchRequestData.uploadTypes = uploadTypes;
+	searchRequestData.agreementTypes = agreementTypes;
+	searchRequestData.statuses = statuses;
+	
+	searchRequests(searchRequestData);
+}
+
+//Search Call
+function searchRequests(data) {
+	$('#loading').show();
+
+	$.ajax({
+		type :"POST",
+		dataType :"json",
+		url : contextPath +"/fta/searchRequests.do",
+		data : JSON.stringify(data),
+		contentType : 'application/json'
+	}).done(function(data) {
+		searchResultsTable.clear().draw();
+		searchResultsTable.rows.add(data).draw();
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		showMessage({'message':'Technical exception occured while fetching data.', 'error':true});
+	}).always(function() {
+		$('#loading').hide();
+	});
+};	
+
+function initCreateDialog() {
+	$("#create-dialog").dialog({
+		height: 350,
+		width:600,
+		modal: true,
+		buttons: [
+			{ text: "Create", click: validateCreate },
+			{ text: "Reset", click: function() { $("#createFormId").trigger("reset"); } },
+			{ text: "Return", click: function() { 
+					$(this).dialog("close");
+					if(requestCreated) {
+						fetchTodaysRequests();
+					}
+				}
+			}
+			],
+			close: function() {
+				$("#createFormId").trigger("reset");
+			}
+	});
+}
+
+function validateCreate() {
+	var partNumber = $('#cpartNumber').val().toUpperCase();
+	var facilityCode = $('#cfacilityCode').val().toUpperCase();
+	var engineeringChange = $('#cengineeringChange').val().toUpperCase();
+	var agreementType = $("#cagreementType option:selected").val();
+
+	if(partNumber.trim().length <= 0 || facilityCode.trim().length <= 0 || agreementType.trim().length <= 0) {
+		showMessage({'message':'Please Enter Mandatory Fields', 'error':true});
+
+	} else {
+		var request = {
+				"partNumber": partNumber,
+				"facilityCode": facilityCode,
+				"engineeringChange": engineeringChange,
+				"agreementType": agreementType
+		};
+		createRequest(request, false);
+	}
+}
+
+function createRequest(request, confirm) {
+	$('#loading').show();
+
+	$.ajax({
+		type :"POST",
+		dataType :"json",
+		url : contextPath +"/fta/createRequest.do?confirm="+confirm,
+		data : JSON.stringify(request),
+		contentType : 'application/json',
+		dataType: 'text',
+	}).done(function(data) {
+		processCreateResponse(data, request);
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		showMessage({'message':'Technical exception occured while fetching data.', 'error':true});
+	}).always(function() {
+		$('#loading').hide();
+	});
+}
+
+function processCreateResponse(data, request) {
+	if(data == 'Success') {
+		showMessage({'message':'Request created successfully'});
+		$("#createFormId").trigger("reset");
+		requestCreated = true;
+	} else if (data == 'Error1') {
+		showMessage({'message':'Request already exists for the day', 'error':true});
+	} else if (data == 'Error2') {
+		//createConfirmDialog
+		$("#createConfirmDialog").dialog({
+			height: 'auto',
+			width:400,
+			modal: true,
+			buttons: [
+				{ text: "Yes", click: function() { $(this).dialog("close"); createRequest(request, true); } },
+				{ text: "No", click: function() { $(this).dialog("close"); } }
+				],
+				close: function() {
+					$(this).dialog("destroy");
+				}
+		});
+	} else {
+		showMessage({'message':'Technical exception occured while fetching data.', 'error':true});
+	}
+}
+
+function fetchTodaysRequests() {
+	$("#searchFormId").trigger("reset");
+	var searchRequestData = {"createdDate": new Date()};
+	searchRequests(searchRequestData);
+	requestCreated = false;
+}
+
+function validateCancel() {
+	var selectedRows = $.map(searchResultsTable.rows('.selected').data(), function (item) {
+		return item;
+	});
+	//console.log(openRequests);
+	if(selectedRows.length <= 0) {
+		showMessage({'message':'Please select at least one record to cancel', 'error':true});
+	} else {
+		var openRequests = $.grep(selectedRows, function(request) {
+			return request.status === "OPEN";
+		});
+
+		if(openRequests.length <= 0) {
+			showMessage({'message':'Cannot cancel request which are not in Open status', 'error':true});
+		} else {
+			var notOpenRequest = selectedRows.length - openRequests.length;
+			$("#cancelDialog").dialog({
+				height: 'auto',
+				width:400,
+				modal: true,
+				buttons: [
+					{ text: "Yes", click: function() { $(this).dialog("close"); cancelRequests(openRequests, notOpenRequest); } },
+					{ text: "No", click: function() { $(this).dialog("close"); } }
+					],
+					close: function() {
+						$(this).dialog("destroy");
+					}
+			});
+		}
+	}
+}
+
+function cancelRequests(rquests, notOpenRequest) {
+	$('#loading').show();
+
+	$.ajax({
+		type :"POST",
+		url : contextPath +"/fta/cancelRequests.do",
+		data : JSON.stringify(rquests),
+		contentType : 'application/json',
+		dataType : 'text',
+	}).done(function(data) {
+		var message = 'No of Record Canceled/Deleted successfully: ' + data + '<br\>';
+		message += 'Unable to Delete/Cancel as not in Open Status: ' + notOpenRequest;
+		showMessage({'message':message, 'error':false, 'closeCallback':prepareSearchRequest});
+		
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		showMessage({'message':'Technical exception occured while fetching data.', 'error':true});
+	
+	}).always(function() {
+		$('#loading').hide();
+	});
+}
+
+function refreshRequests() {
+	$('#loading').show();
+
+	$.ajax({
+		type :"GET",
+		dataType :"json",
+		url : contextPath +"/fta/refreshRequests.do",
+		contentType : 'application/json'
+	}).done(function(data) {
+		searchResultsTable.clear().draw();
+		searchResultsTable.rows.add(data).draw();
+	}).fail(function(jqXHR, textStatus, errorThrown) {
+		showMessage({'message':'Technical exception occured while fetching data.', 'error':true});
+	}).always(function() {
+		$('#loading').hide();
+	});
+}
+
+function showMessage(data) {
+	if(data.error) {
+		$("#dialog").attr("title", "Error");
+	}
+	$("#message").html(data.message);
+	$("#dialog").dialog({
+		resizable: true,
+		width:400,
+		height:'auto',
+		modal: true,
+		buttons: {
+			"OK": function() {
+				$( this ).dialog( "close" );
+				if(data.closeCallback != undefined) {
+					data.closeCallback();
+				}
+			}
+		}
+	});
+}
+
+function formatDate(data) {
+	var date = new Date(data);
+	var dd = date.getDate();
+	var mm = date.getMonth() + 1;
+
+	var yyyy = date.getFullYear();
+	if (dd < 10) {
+		dd = '0' + dd;
+	} 
+	if (mm < 10) {
+		mm = '0' + mm;
+	} 
+	return yyyy + '-' + mm + '-' + dd;
+}
