@@ -14,22 +14,6 @@ public class PerkinsBOMRequestDTO {
 	
 	private String enty;
 
-	public String getEnty() {
-		return enty;
-	}
-
-	public void setEnty(String enty) {
-		this.enty = enty;
-	}
-
-	public String getExWorksPrice() {
-		return exWorksPrice;
-	}
-
-	public void setExWorksPrice(String exWorksPrice) {
-		this.exWorksPrice = exWorksPrice;
-	}
-
 	private String exWorksPrice;
 
 	private String year;
@@ -60,269 +44,156 @@ public class PerkinsBOMRequestDTO {
 	
 	private List<String> errorMessage = new ArrayList<String>();
 	
-	//private String errorMessage;
-
-	/**
-	 * @return the requestNumber
-	 */
 	public String getRequestNumber() {
-		return requestNumber;
+	    return requestNumber;
 	}
-
-	/**
-	 * @param requestNumber the requestNumber to set
-	 */
+	
 	public void setRequestNumber(String requestNumber) {
-		this.requestNumber = requestNumber;
+	    this.requestNumber = requestNumber;
 	}
-
-	/**
-	 * @return the partNumber
-	 */
+	
 	public String getPartNumber() {
-		return partNumber;
+	    return partNumber;
 	}
-
-	/**
-	 * @param partNumber the partNumber to set
-	 */
+	
 	public void setPartNumber(String partNumber) {
-		this.partNumber = partNumber;
+	    this.partNumber = partNumber;
 	}
-
-	/**
-	 * @return the facilityCode
-	 */
+	
 	public String getFacilityCode() {
-		return facilityCode;
+	    return facilityCode;
 	}
-
-	/**
-	 * @param facilityCode the facilityCode to set
-	 */
+	
 	public void setFacilityCode(String facilityCode) {
-		this.facilityCode = facilityCode;
+	    this.facilityCode = facilityCode;
 	}
-
-	/**
-	 * @return the engineeringChange
-	 */
 	
-
-	/**
-	 * @param engineeringChange the engineeringChange to set
-	 */
+	public String getEnty() {
+	    return enty;
+	}
 	
-	/**
-	 * @return the year
-	 */
+	public void setEnty(String enty) {
+	    this.enty = enty;
+	}
+	
+	public String getExWorksPrice() {
+	    return exWorksPrice;
+	}
+	
+	public void setExWorksPrice(String exWorksPrice) {
+	    this.exWorksPrice = exWorksPrice;
+	}
+	
 	public String getYear() {
-		return year;
+	    return year;
 	}
-
-	/**
-	 * @param year the year to set
-	 */
+	
 	public void setYear(String year) {
-		this.year = year;
+	    this.year = year;
 	}
-
-	/**
-	 * @return the agreementType
-	 */
+	
 	public String getAgreementType() {
-		return agreementType;
+	    return agreementType;
 	}
-
-	/**
-	 * @param agreementType the agreementType to set
-	 */
+	
 	public void setAgreementType(String agreementType) {
-		this.agreementType = agreementType;
+	    this.agreementType = agreementType;
 	}
-
-	/**
-	 * @return the status
-	 */
+	
 	public String getStatus() {
-		return status;
+	    return status;
 	}
-
-	/**
-	 * @param status the status to set
-	 */
+	
 	public void setStatus(String status) {
-		this.status = status;
+	    this.status = status;
 	}
-
-	/**
-	 * @return the uploadType
-	 */
+	
 	public String getUploadType() {
-		return uploadType;
+	    return uploadType;
 	}
-
-	/**
-	 * @param uploadType the uploadType to set
-	 */
+	
 	public void setUploadType(String uploadType) {
-		this.uploadType = uploadType;
+	    this.uploadType = uploadType;
 	}
-
-	/**
-	 * @return the resultNumber
-	 */
+	
 	public String getResultNumber() {
-		return resultNumber;
+	    return resultNumber;
 	}
-
-	/**
-	 * @param resultNumber the resultNumber to set
-	 */
+	
 	public void setResultNumber(String resultNumber) {
-		this.resultNumber = resultNumber;
+	    this.resultNumber = resultNumber;
 	}
-
-	/**
-	 * @return the createdDate
-	 */
+	
 	public Date getCreatedDate() {
-		return createdDate;
+	    return createdDate;
 	}
-
-	/**
-	 * @param createdDate the createdDate to set
-	 */
+	
 	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
+	    this.createdDate = createdDate;
 	}
-
-	/**
-	 * @return the createdBy
-	 */
+	
 	public String getCreatedBy() {
-		return createdBy;
+	    return createdBy;
 	}
-
-	/**
-	 * @param createdBy the createdBy to set
-	 */
+	
 	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
+	    this.createdBy = createdBy;
 	}
-
-	/**
-	 * @return the updatedDate
-	 */
+	
 	public Date getUpdatedDate() {
-		return updatedDate;
+	    return updatedDate;
 	}
-
-	/**
-	 * @param updatedDate the updatedDate to set
-	 */
+	
 	public void setUpdatedDate(Date updatedDate) {
-		this.updatedDate = updatedDate;
+	    this.updatedDate = updatedDate;
 	}
-
-	/**
-	 * @return the updatedBy
-	 */
+	
 	public String getUpdatedBy() {
-		return updatedBy;
+	    return updatedBy;
 	}
-
-	/**
-	 * @param updatedBy the updatedBy to set
-	 */
+	
 	public void setUpdatedBy(String updatedBy) {
-		this.updatedBy = updatedBy;
+	    this.updatedBy = updatedBy;
 	}
-
-	/**
-	 * @return the agreementTypes
-	 */
+	
 	public List<String> getAgreementTypes() {
-		return agreementTypes;
+	    return agreementTypes;
 	}
-
-	/**
-	 * @param agreementTypes the agreementTypes to set
-	 */
+	
 	public void setAgreementTypes(List<String> agreementTypes) {
-		this.agreementTypes = agreementTypes;
+	    this.agreementTypes = agreementTypes;
 	}
-
-	/**
-	 * @return the statuses
-	 */
+	
 	public List<String> getStatuses() {
-		return statuses;
+	    return statuses;
 	}
-
-	/**
-	 * @param statuses the statuses to set
-	 */
+	
 	public void setStatuses(List<String> statuses) {
-		this.statuses = statuses;
+	    this.statuses = statuses;
 	}
-
-	/**
-	 * @return the uploadTypes
-	 */
+	
 	public List<String> getUploadTypes() {
-		return uploadTypes;
+	    return uploadTypes;
 	}
-
-	/**
-	 * @param uploadTypes the uploadTypes to set
-	 */
+	
 	public void setUploadTypes(List<String> uploadTypes) {
-		this.uploadTypes = uploadTypes;
+	    this.uploadTypes = uploadTypes;
 	}
-
-	/**
-	 * @return the isFieldsErr
-	 */
+	
 	public boolean isFieldsErr() {
-		return isFieldsErr;
+	    return isFieldsErr;
 	}
-
-	/**
-	 * @param isFieldsErr the isFieldsErr to set
-	 */
-	public void setFieldsErr(boolean isFieldsErr) {
-		this.isFieldsErr = isFieldsErr;
+	
+	public void setFieldsErr(boolean fieldsErr) {
+	    isFieldsErr = fieldsErr;
 	}
-
-	/**
-	 * @return the errorMsgs
-	 */
+	
 	public List<String> getErrorMessage() {
-		return errorMessage;
+	    return errorMessage;
 	}
-
-	/**
-	 * @param errorMsgs the errorMsgs to set
-	 */
-	public void setErrorMessage(List<String> errorMsgs) {
-		this.errorMessage = errorMsgs;
+	
+	public void setErrorMessage(List<String> errorMessage) {
+	    this.errorMessage = errorMessage;
 	}
-
-/*	*//**
-	 * @return the errorMessage
-	 *//*
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	*//**
-	 * @param errorMessage the errorMessage to set
-	 *//*
-	public void setErrorMessage(String errorMessage) {
-		this.errorMessage = errorMessage;
-	}*/
-
-
 
 }
