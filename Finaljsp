@@ -143,7 +143,7 @@ $(document).ready(function() {
 					</div>
 					
 					<div class="col-sm-1 col-xs-12">
-						<label for="status" class="epa-offset-top3 pull-" class="form-control input-sm">${status}</label>
+						<label for="status" class="epa-offset-top3 pull-left">${status}</label>
 					</div>
 					<div class="col-sm-2 col-xs-12">
 						<form:select id="status" path="status" multiple="multiple" class="form-control input-sm">
@@ -240,7 +240,7 @@ $(document).ready(function() {
 						<label for="pAgreementType" class="epa-offset-top3 pull-right control-label" >${agreementType}</label>
 					</div>
 					<div class="col-sm-6 col-xs-12">
-						<select id="perkinsAgreementType" class="form-control input-sm">
+						<select id="pAgreementType" class="form-control input-sm">
 							<option value="">${select}</option>
 							 <c:forEach var="item" items="${agreementTypes}">
 						        <option value="${item}">${item}</option>
@@ -251,10 +251,10 @@ $(document).ready(function() {
 									
 				<%-- <div class="form-group row required">
 					<div class="col-sm-4 col-xs-12">
-						<label for="perkinsFTAYear" class="epa-offset-top3 pull-right control-label" >${ftaYear}</label>
+						<label for="pFTAYear" class="epa-offset-top3 pull-right control-label" >${ftaYear}</label>
 					</div>
 					<div class="col-sm-6 col-xs-12">
-						<input type="text" id="perkinsFTAYear" path="perkinsFTAYear" class="form-control input-sm"/>
+						<input type="text" id="pFTAYear" path="perkinsFTAYear" class="form-control input-sm"/>
 					</div>
 				</div> --%>
 				
@@ -263,7 +263,7 @@ $(document).ready(function() {
 						<label for="pExWorksPrice" class="epa-offset-top3 pull-right control-label" >${exWorksPrice}</label>
 					</div>
 					<div class="col-sm-6 col-xs-12">
-						<input type="number" id="perkinsExWorksPrice" pattern ="^\d*(\.\d{0,2})?$" class="form-control input-sm"/>
+						<input type="number" id="pExWorksPrice" pattern ="^\d*(\.\d{0,2})?$" class="form-control input-sm"/>
 					</div>
 				</div>
 			</fieldset>
